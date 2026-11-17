@@ -1,5 +1,36 @@
+
 import type { Metadata, Viewport } from 'next';
 import './style.css';
-export const metadata:Metadata={title:'Il mio calendario',description:'Agenda personale',manifest:'/manifest.webmanifest',appleWebApp:{capable:true,title:'Calendario',statusBarStyle:'default'}};
-export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#f8f9fd'};
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="it"><body>{children}</body></html>}
+
+export const metadata: Metadata = {
+  title: 'WAYO',
+  description: 'Organizza i tuoi viaggi, eventi e itinerari',
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'WAYO',
+    statusBarStyle: 'black-translucent',
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="it">
+      <body>{children}</body>
+    </html>
+  );
+}

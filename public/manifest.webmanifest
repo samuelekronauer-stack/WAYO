@@ -1,1 +1,18 @@
-{"name":"Il mio calendario","short_name":"Calendario","start_url":"/","display":"standalone","background_color":"#f8f9fd","theme_color":"#f8f9fd","icons":[{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+
+{
+  "name": "WAYO",
+  "short_name": "WAYO",
+  "description": "Organizza i tuoi viaggi, eventi e itinerari",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
