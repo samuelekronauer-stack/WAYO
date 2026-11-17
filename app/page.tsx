@@ -1,0 +1,36 @@
+'use client';
+import {useEffect,useMemo,useState} from 'react';
+import {CalendarDays,ChevronLeft,ChevronRight,Plus,MapPin,Trash2,Pencil,X,Download} from 'lucide-react';
+type Event={id:string;title:string;date:string;time:string;location:string;notes:string;category:string};
+const initial:Event[]=[
+{id:'1',title:"Ralph's Coffee",date:'2026-11-17',time:'09:00',location:'Manhattan',notes:'',category:'Viaggio'},
+{id:'2',title:'Financial District, Borsa, Oculus e World Trade Center',date:'2026-11-17',time:'10:00',location:'Lower Manhattan',notes:'Orario indicativo',category:'Viaggio'},
+{id:'3',title:'DUMBO, Brooklyn',date:'2026-11-18',time:'14:00',location:'Brooklyn',notes:'Pomeriggio; orario indicativo',category:'Viaggio'},
+{id:'4',title:'Brooklyn Nets vs Chicago Bulls',date:'2026-11-18',time:'19:30',location:'Brooklyn',notes:'',category:'Eventi'},
+{id:'5',title:'SUMMIT One Vanderbilt',date:'2026-11-19',time:'09:30',location:'Manhattan',notes:'',category:'Viaggio'},
+{id:'6',title:'Brunch Pershing Square',date:'2026-11-19',time:'11:00',location:'Manhattan',notes:'',category:'Cibo'},
+{id:'7',title:'Pilates MOUV',date:'2026-11-20',time:'09:30',location:'Brooklyn',notes:'',category:'Sport'},
+{id:'8',title:'Cena Chinatown',date:'2026-11-20',time:'20:30',location:'Chinatown',notes:'',category:'Cibo'}];
+const categories=['Viaggio','Sport','Cibo','Eventi','Altro'];
+const empty=(date:string):Event=>({id:'',title:'',date,time:'09:00',location:'',notes:'',category:'Viaggio'});
+const dateLabel=(d:string)=>new Date(d+'T12:00:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});
+const shift=(d:string,n:number)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`};
+export default function Page(){
+ const [events,setEvents]=useState<Event[]>(initial);const [selected,setSelected]=useState('2026-11-17');const [view,setView]=useState<'week'|'month'>('week');const [editor,setEditor]=useState<Event|null>(null);const [ready,setReady]=useState(false);
+ useEffect(()=>{try{const saved=localStorage.getItem('nyc-calendar-events-v1');if(saved){const parsed=JSON.parse(saved);if(Array.isArray(parsed))setEvents(parsed)}}catch{}setReady(true)},[]);
+ useEffect(()=>{if(ready)localStorage.setItem('nyc-calendar-events-v1',JSON.stringify(events))},[events,ready]);
+ const weekStart=useMemo(()=>{const x=new Date(selected+'T12:00:00');return shift(selected,-((x.getDay()+6)%7))},[selected]);
+ const days=useMemo(()=>Array.from({length:7},(_,i)=>shift(weekStart,i)),[weekStart]);
+ const monthDays=useMemo(()=>{const first=selected.slice(0,7)+'-01';const start=shift(first,-((new Date(first+'T12:00:00').getDay()+6)%7));return Array.from({length:42},(_,i)=>shift(start,i))},[selected]);
+ const todays=events.filter(e=>e.date===selected).sort((a,b)=>a.time.localeCompare(b.time));
+ const save=()=>{if(!editor||!editor.title.trim()||!editor.date)return;const updated={...editor,id:editor.id||String(Date.now())};setEvents(old=>editor.id?old.map(e=>e.id===editor.id?updated:e):[...old,updated]);setSelected(updated.date);setEditor(null)};
+ const download=()=>{const blob=new Blob([JSON.stringify(events,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='calendario-backup.json';a.click();URL.revokeObjectURL(url)};
+ return <main className="shell"><header><div className="brand"><span className="brandIcon"><CalendarDays size={22}/></span><div><strong>Il mio calendario</strong><small>Organizza i tuoi momenti</small></div></div><button className="add desktop" onClick={()=>setEditor(empty(selected))}><Plus size={18}/> Nuovo evento</button></header>
+ <section className="content"><div className="toolbar"><div className="monthNav"><button aria-label="Precedente" onClick={()=>setSelected(shift(selected,view==='week'?-7:-30))}><ChevronLeft/></button><h1>{new Date(selected+'T12:00:00').toLocaleDateString('it-IT',{month:'long',year:'numeric'})}</h1><button aria-label="Successivo" onClick={()=>setSelected(shift(selected,view==='week'?7:30))}><ChevronRight/></button></div><div className="switch"><button className={view==='week'?'active':''} onClick={()=>setView('week')}>Settimana</button><button className={view==='month'?'active':''} onClick={()=>setView('month')}>Mese</button></div></div>
+ <div className={'days '+(view==='month'?'monthGrid':'')}>{(view==='week'?days:monthDays).map(d=><button key={d} className={'day '+(d===selected?'chosen ':'')+(d.slice(0,7)!==selected.slice(0,7)?'muted':'')} onClick={()=>setSelected(d)}><span>{new Date(d+'T12:00:00').toLocaleDateString('it-IT',{weekday:'short'})}</span><strong>{Number(d.slice(8))}</strong><div className="dots">{events.filter(e=>e.date===d).slice(0,3).map(e=><i key={e.id} className={'dot '+e.category}/>)}</div></button>)}</div>
+ <div className="sectionHead"><h2>{dateLabel(selected)}</h2><button onClick={()=>setEditor(empty(selected))}><Plus size={17}/> Aggiungi</button></div>
+ <div className="eventList">{todays.length?todays.map(e=><article className={'event '+e.category} key={e.id}><div className="time">{e.time}</div><div className="details"><strong>{e.title}</strong>{e.location&&<span><MapPin size={14}/>{e.location}</span>}{e.notes&&<small>{e.notes}</small>}</div><button className="edit" aria-label="Modifica evento" onClick={()=>setEditor({...e})}><Pencil size={17}/></button></article>):<div className="empty">Nessun evento per questa giornata.<br/>Aggiungine uno con il pulsante +</div>}</div>
+ <button className="backup" onClick={download}><Download size={16}/> Esporta backup eventi</button></section>
+ <button className="floating" aria-label="Aggiungi evento" onClick={()=>setEditor(empty(selected))}><Plus size={26}/></button>
+ {editor&&<div className="overlay" onMouseDown={e=>{if(e.target===e.currentTarget)setEditor(null)}}><section className="modal"><div className="modalHead"><h2>{editor.id?'Modifica evento':'Nuovo evento'}</h2><button onClick={()=>setEditor(null)}><X/></button></div><label>Titolo<input autoFocus value={editor.title} onChange={e=>setEditor({...editor,title:e.target.value})} placeholder="Es. Brunch"/></label><label>Data<input type="date" value={editor.date} onChange={e=>setEditor({...editor,date:e.target.value})}/></label><label>Orario<input type="time" value={editor.time} onChange={e=>setEditor({...editor,time:e.target.value})}/></label><label>Luogo<input value={editor.location} onChange={e=>setEditor({...editor,location:e.target.value})} placeholder="Facoltativo"/></label><label>Categoria<select value={editor.category} onChange={e=>setEditor({...editor,category:e.target.value})}>{categories.map(c=><option key={c}>{c}</option>)}</select></label><label>Note<textarea rows={3} value={editor.notes} onChange={e=>setEditor({...editor,notes:e.target.value})}/></label><div className="actions">{editor.id&&<button className="delete" onClick={()=>{if(confirm('Eliminare questo evento?')){setEvents(old=>old.filter(e=>e.id!==editor.id));setEditor(null)}}}><Trash2 size={17}/> Elimina</button>}<button className="save" onClick={save} disabled={!editor.title.trim()}>Salva evento</button></div></section></div>}</main>
+}
