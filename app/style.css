@@ -1,1 +1,45 @@
 *{box-sizing:border-box}body{margin:0;background:#f7f8fc;color:#1b2337;font-family:Arial,Helvetica,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid #6366f1;outline-offset:2px}.shell{max-width:1050px;margin:0 auto;min-height:100vh;background:white}header{height:85px;border-bottom:1px solid #edf0f6;display:flex;align-items:center;justify-content:space-between;padding:0 35px}.brand{display:flex;align-items:center;gap:12px}.brandIcon{background:#eef0ff;color:#4f46e5;padding:11px;border-radius:14px;display:flex}.brand strong{display:block;font-size:21px}.brand small{display:block;color:#9299a9;margin-top:4px}.add,.save{background:#5149e8;color:white;border:0;border-radius:12px;padding:12px 18px;display:flex;gap:8px;align-items:center;font-weight:700}.content{max-width:850px;margin:auto;padding:32px 24px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.monthNav{display:flex;align-items:center;gap:14px}.monthNav h1{font-size:25px;text-transform:capitalize;min-width:200px;text-align:center}.monthNav button,.modalHead button{border:0;background:transparent;color:#5b6476;padding:7px}.switch{background:#f2f3fa;padding:4px;border-radius:12px;display:flex}.switch button{border:0;background:transparent;border-radius:9px;padding:10px 15px;color:#677086}.switch .active{background:white;color:#4f46e5;box-shadow:0 1px 6px #0001;font-weight:700}.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.day{border:1px solid #e9ecf3;background:#fff;border-radius:13px;min-height:96px;padding:12px 3px;display:flex;align-items:center;flex-direction:column;gap:9px}.day span{color:#9299aa;font-size:13px;text-transform:capitalize}.day strong{font-size:20px}.day.chosen{border:2px solid #6158ef;background:#f1f1ff;color:#4438ca}.day.muted{opacity:.45}.dots{display:flex;gap:4px;height:6px}.dot{width:6px;height:6px;border-radius:50%;background:#569aff}.dot.Sport{background:#34b878}.dot.Cibo{background:#fb994b}.dot.Eventi{background:#ad6de3}.dot.Altro{background:#8a95a8}.monthGrid{gap:5px}.monthGrid .day{min-height:72px;gap:4px;padding:6px 2px}.monthGrid .day strong{font-size:17px}.sectionHead{display:flex;align-items:center;justify-content:space-between;margin:35px 0 18px}.sectionHead h2{font-size:23px;text-transform:capitalize}.sectionHead button{display:flex;gap:6px;align-items:center;background:transparent;border:0;color:#5149e8;font-weight:700}.eventList{display:flex;flex-direction:column;gap:12px}.event{border-left:5px solid #569aff;border-radius:12px;background:#f7f9fd;padding:20px;display:flex;align-items:center;gap:22px;min-height:88px}.event.Sport{border-color:#34b878}.event.Cibo{border-color:#fb994b}.event.Eventi{border-color:#ad6de3}.event.Altro{border-color:#8a95a8}.time{font-weight:700;min-width:58px}.details{flex:1;min-width:0}.details strong{display:block;font-size:16px;line-height:1.35}.details span{display:flex;align-items:center;gap:4px;color:#798295;font-size:13px;margin-top:8px}.details small{display:block;color:#798295;margin-top:6px}.edit{background:transparent;border:0;color:#7b8398;padding:8px}.empty{text-align:center;padding:48px 12px;color:#8b93a4;line-height:1.8;border:1px dashed #dce0ed;border-radius:14px}.backup{margin-top:30px;border:0;background:transparent;color:#717b90;display:flex;gap:8px;align-items:center;font-size:13px}.floating{position:fixed;bottom:25px;right:25px;background:#5149e8;color:white;border:0;border-radius:50%;width:60px;height:60px;box-shadow:0 9px 25px #5149e84d;display:none;align-items:center;justify-content:center}.overlay{position:fixed;inset:0;background:#18203680;display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}.modal{background:white;border-radius:20px;width:min(100%,460px);padding:24px;max-height:92vh;overflow:auto;box-shadow:0 15px 60px #0002}.modalHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.modalHead h2{margin:0;font-size:22px}.modal label{display:block;font-weight:700;font-size:13px;margin:15px 0;color:#424a60}.modal input,.modal select,.modal textarea{display:block;width:100%;border:1px solid #dce0ea;border-radius:10px;padding:12px;margin-top:7px;background:white;color:#1b2337}.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}.delete{border:0;background:#fff1f1;color:#d54444;border-radius:10px;padding:12px;display:flex;align-items:center;gap:5px}.save:disabled{opacity:.5}@media(max-width:600px){header{height:73px;padding:0 18px}.brand strong{font-size:18px}.brand small{font-size:11px}.desktop{display:none}.content{padding:17px 12px 95px}.toolbar{align-items:stretch;flex-direction:column;gap:9px}.monthNav{justify-content:space-between}.monthNav h1{font-size:21px}.switch{align-self:flex-end}.days{gap:4px}.day{min-height:79px;border-radius:9px;gap:7px;padding:9px 1px}.day span{font-size:11px}.day strong{font-size:17px}.sectionHead{margin-top:27px}.sectionHead h2{font-size:20px}.event{padding:15px 12px;gap:11px}.time{min-width:45px;font-size:14px}.details strong{font-size:14px}.floating{display:flex}.modal{padding:20px}.monthGrid .day{min-height:66px}}
+
+.tripsHeading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.tripsHeading h1 { margin: 0; font-size: 25px; }
+.tripList {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tripCard {
+  width: 100%;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e9ecf3;
+  border-radius: 13px;
+  background: #f7f9fd;
+  color: inherit;
+  text-align: left;
+}
+.tripCard:hover { border-color: #6158ef; }
+.tripDetails { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.tripDetails strong, .tripDetails span { display: block; }
+.tripDetails span { margin-top: 5px; color: #677086; font-size: 14px; }
+.tripCard > svg { flex-shrink: 0; color: #5149e8; }
+.tripBack {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  padding: 6px 0;
+  border: 0;
+  color: #5149e8;
+  font-weight: 700;
+}
