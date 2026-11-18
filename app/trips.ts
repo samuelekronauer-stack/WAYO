@@ -14,6 +14,7 @@ export type Trip = {
   name: string;
   startDate: string;
   endDate: string;
+  lodging?: string;
   events: CalendarEvent[];
 };
 
@@ -47,4 +48,15 @@ export function loadTrips(storage: Storage): Trip[] {
   // An empty legacy calendar is valid and must stay empty.
   const savedEvents = readArray(storage, 'nyc-calendar-events-v1') as CalendarEvent[] | undefined;
   return [{ ...newYork, events: savedEvents ?? newYork.events }];
+}
+
+const tripDates = new Intl.DateTimeFormat('it-IT', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+export function formatTripDates(trip: Trip): string {
+  return tripDates.formatRange(new Date(trip.startDate), new Date(trip.endDate));
 }

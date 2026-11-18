@@ -3,14 +3,7 @@
 import { ArrowUpRight, CalendarDays, MapPin, Plus, X } from 'lucide-react';
 import { useEffect, useState, type FormEvent } from 'react';
 import Calendar from './calendar';
-import { createId, loadTrips, newYork, tripsKey, type CalendarEvent, type Trip } from './trips';
-
-const tripDates = new Intl.DateTimeFormat('it-IT', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
+import { createId, formatTripDates, loadTrips, newYork, tripsKey, type Trip } from './trips';
 
 export default function Page() {
   const [trips, setTrips] = useState<Trip[]>([newYork]);
@@ -42,9 +35,9 @@ export default function Page() {
     }
   }
 
-  function updateEvents(update: (events: CalendarEvent[]) => CalendarEvent[]) {
+  function updateActiveTrip(update: (trip: Trip) => Trip) {
     return updateTrips((current) => current.map((trip) =>
-      trip.id === activeId ? { ...trip, events: update(trip.events) } : trip,
+      trip.id === activeId ? update(trip) : trip,
     ));
   }
 
@@ -53,6 +46,7 @@ export default function Page() {
     const data = new FormData(event.currentTarget);
     const name = String(data.get('name') ?? '').trim();
     const endDate = String(data.get('endDate') ?? '');
+    const lodging = String(data.get('lodging') ?? '').trim();
     if (!name || !startDate || !endDate || endDate < startDate) return;
 
     const trip: Trip = {
@@ -60,6 +54,7 @@ export default function Page() {
       name,
       startDate,
       endDate,
+      lodging: lodging || undefined,
       events: [],
     };
     if (!updateTrips((current) => [...current, trip])) return;
@@ -73,7 +68,8 @@ export default function Page() {
         key={activeTrip.id}
         trip={activeTrip}
         onBack={() => setActiveId(undefined)}
-        onEventsChange={updateEvents}
+        onEventsChange={(update) => updateActiveTrip((trip) => ({ ...trip, events: update(trip.events) }))}
+        onLodgingChange={(lodging) => updateActiveTrip((trip) => ({ ...trip, lodging: lodging || undefined }))}
       />
     );
   }
@@ -102,7 +98,7 @@ export default function Page() {
               <button className={`tripCard${trip.id === newYork.id ? " tripCardNewYork" : ""}`} disabled={!ready} onClick={() => setActiveId(trip.id)}>
                 <span className="tripDetails">
                   <strong>{trip.name}</strong>
-                  <span><CalendarDays size={16} aria-hidden="true" />{tripDates.formatRange(new Date(trip.startDate), new Date(trip.endDate))}</span>
+                  <span><CalendarDays size={16} aria-hidden="true" />{formatTripDates(trip)}</span>
                 </span>
                 <span className="tripArrow"><ArrowUpRight size={20} aria-hidden="true" /></span>
               </button>
@@ -132,6 +128,7 @@ export default function Page() {
             <label>Nome del viaggio<input name="name" autoFocus required pattern={'.*\\S.*'} /></label>
             <label>Data di inizio<input type="date" required value={startDate} onChange={(event) => setStartDate(event.target.value)} /></label>
             <label>Data di fine<input name="endDate" type="date" required min={startDate || undefined} /></label>
+            <label>Alloggio (facoltativo)<input name="lodging" placeholder="Nome e città oppure indirizzo" /></label>
             <div className="actions"><button className="save">Crea viaggio</button></div>
           </form>
         </div>
