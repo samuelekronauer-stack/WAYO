@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarDays, ChevronRight, Plus, X } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, MapPin, Plus, X } from 'lucide-react';
 import { useEffect, useState, type FormEvent } from 'react';
 import Calendar from './calendar';
 import { createId, loadTrips, newYork, tripsKey, type CalendarEvent, type Trip } from './trips';
@@ -82,7 +82,7 @@ export default function Page() {
     <main className="shell">
       <header>
         <div className="brand">
-          <span className="brandIcon"><CalendarDays size={22} aria-hidden="true" /></span>
+          <span className="brandIcon"><MapPin size={22} aria-hidden="true" /></span>
           <div><strong>WAYO</strong></div>
         </div>
       </header>
@@ -99,13 +99,12 @@ export default function Page() {
         <ul className="tripList">
           {trips.map((trip) => (
             <li key={trip.id}>
-              <button className="tripCard" disabled={!ready} onClick={() => setActiveId(trip.id)}>
-                <span className="brandIcon"><CalendarDays size={22} aria-hidden="true" /></span>
+              <button className={`tripCard${trip.id === newYork.id ? " tripCardNewYork" : ""}`} disabled={!ready} onClick={() => setActiveId(trip.id)}>
                 <span className="tripDetails">
                   <strong>{trip.name}</strong>
-                  <span>{tripDates.formatRange(new Date(trip.startDate), new Date(trip.endDate))}</span>
+                  <span><CalendarDays size={16} aria-hidden="true" />{tripDates.formatRange(new Date(trip.startDate), new Date(trip.endDate))}</span>
                 </span>
-                <ChevronRight size={20} aria-hidden="true" />
+                <span className="tripArrow"><ArrowUpRight size={20} aria-hidden="true" /></span>
               </button>
             </li>
           ))}
