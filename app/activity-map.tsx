@@ -18,19 +18,25 @@ const newYorkDestinations: Record<string, { location: string; destination: strin
 
 type Props = {
   event: CalendarEvent;
-  isNewYork?: boolean;
+  destination: string;
   onClose: () => void;
 };
 
-export function ActivityMap({ event, isNewYork, onClose }: Props) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const location = event.location.trim();
+export function getDestination(event: CalendarEvent, isNewYork: boolean): string {
+  const location = event.location?.trim() ?? '';
   const seed = isNewYork ? newYork.events.find(({ id }) => id === event.id) : undefined;
   const original = seed?.title === event.title ? newYorkDestinations[event.id] : undefined;
-  const query = original?.location === location
-    ? original.destination
-    : location;
-  const encoded = encodeURIComponent(query);
+  return original?.location === location ? original.destination : location;
+}
+
+export function getDirections(lodging: string, destination: string): string {
+  const params = new URLSearchParams({ api: '1', origin: lodging, destination });
+  return `https://www.google.com/maps/dir/?${params}`;
+}
+
+export function ActivityMap({ event, destination, onClose }: Props) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const encoded = encodeURIComponent(destination);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encoded}`;
 
   useEffect(() => {
@@ -43,7 +49,7 @@ export function ActivityMap({ event, isNewYork, onClose }: Props) {
         <h2 id="map-title">{event.title}</h2>
         <button type="button" aria-label="Chiudi mappa" autoFocus onClick={() => dialog.current?.close()}><X /></button>
       </div>
-      <p className="mapAddress">{query}</p>
+      <p className="mapAddress">{destination}</p>
       <iframe
         className="mapFrame"
         title={`Mappa di ${event.title}`}

@@ -139,3 +139,115 @@ header { background: #fff; border-color: var(--line); }
   .tripCard { padding: 18px; }
   .calendarPanel { padding: 8px; border-radius: 14px; }
 }
+
+.itinerary {
+  --agenda-line: #d9e4df;
+  padding-top: 22px;
+}
+.itineraryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 2px 0 22px;
+}
+.itineraryHeader h1 {
+  margin: 0;
+  font: 700 clamp(2.5rem, 8vw, 4.4rem)/1 Georgia, serif;
+  letter-spacing: -.05em;
+  overflow-wrap: anywhere;
+}
+.itineraryHeader p, .lodgingCard p, .itinerary .sectionHead p { color: var(--muted); }
+.itineraryHeader p { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; }
+.lodgingCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 16px;
+  background: #edf4ef;
+}
+.lodgingCard h2 { font-size: 15px; margin: 0 0 4px; }
+.lodgingCard p { font-size: 14px; margin: 0; overflow-wrap: anywhere; }
+.itineraryAction {
+  padding: 8px 10px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--accent-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+.itinerary .calendarPanel { padding: 16px; border-color: var(--agenda-line); }
+.itinerary .monthNav h2 {
+  margin: 0;
+  font: 700 clamp(1.15rem, 3.5vw, 1.6rem)/1.2 Georgia, serif;
+  text-transform: capitalize;
+}
+.itinerary .monthNav button {
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 9px;
+}
+.itinerary .calendarPanel .toolbar { margin-bottom: 16px; }
+.itinerary .day { min-height: 82px; color: var(--ink); gap: 6px; }
+.itinerary .monthGrid .day { min-height: 62px; gap: 3px; }
+.itinerary .day:hover { border-color: var(--accent); }
+.itinerary .day.chosen { border-color: var(--accent-dark); background: var(--accent-dark); color: #fff; }
+.itinerary .day.chosen > span { color: #fff; }
+.itinerary .day.muted { opacity: .65; }
+.itinerary .sectionHead { gap: 8px; margin: 28px 0 14px; }
+.itinerary .sectionHead h2 { margin: 0; font: 700 clamp(1.3rem, 4vw, 2rem)/1.1 Georgia, serif; }
+.itinerary .sectionHead p { margin: 5px 0 0; font-size: 13px; }
+.itineraryAgenda { margin: 0; padding: 0; list-style: none; }
+.itineraryAgenda .event { align-items: start; padding: 16px; gap: 14px; }
+.itineraryAgenda .time {
+  min-width: 0;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: #edf4ef;
+  color: var(--accent-dark);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.itineraryAgenda h3 { margin: 3px 0; font-size: 16px; line-height: 1.35; }
+.eventActions { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 6px; }
+.eventActions .eventMap { flex-wrap: nowrap; overflow-wrap: anywhere; }
+.eventActions svg { flex: none; }
+.directionsLink {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: #e4f2ed;
+  color: var(--accent-dark);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.directionsLink:hover { text-decoration: underline; }
+.itinerary .empty { margin: 0; color: var(--muted); }
+
+@media (max-width: 600px) {
+  .itinerary { padding-bottom: 32px; }
+  .itineraryHeader { margin-bottom: 16px; }
+  .itineraryHeader .add { padding: 9px 12px; font-size: 14px; }
+  .lodgingCard { grid-template-columns: auto minmax(0, 1fr); }
+  .lodgingCard .itineraryAction { grid-column: 2; justify-self: start; }
+  .itinerary .calendarPanel { padding: 10px; }
+  .itinerary .calendarPanel .toolbar { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .itinerary .monthNav { flex: 1; min-width: 192px; gap: 5px; }
+  .itinerary .switch button { padding: 6px 8px; font-size: 13px; }
+  .itinerary .day { min-height: 58px; padding: 5px 1px; }
+  .itinerary .monthGrid .day { min-height: 49px; gap: 2px; }
+  .itineraryAgenda .event { padding: 12px 8px; gap: 8px; }
+  .itineraryAgenda .time { padding-inline: 5px; }
+  .itineraryAgenda .edit { padding: 5px; }
+}
