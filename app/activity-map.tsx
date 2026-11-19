@@ -29,8 +29,12 @@ export function getDestination(event: CalendarEvent, isNewYork: boolean): string
   return original?.location === location ? original.destination : location;
 }
 
-export function getDirections(lodging: string, destination: string): string {
-  const params = new URLSearchParams({ api: '1', origin: lodging, destination });
+export type TravelMode = 'walking' | 'transit' | 'driving';
+
+export function getDirections(origin: string, destination: string, mode?: TravelMode, waypoints: string[] = []): string {
+  const params = new URLSearchParams({ api: '1', origin, destination });
+  if (mode) params.set('travelmode', mode);
+  if (waypoints.length) params.set('waypoints', waypoints.join('|'));
   return `https://www.google.com/maps/dir/?${params}`;
 }
 

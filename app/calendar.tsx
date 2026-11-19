@@ -2,7 +2,8 @@
 
 import { useState, type FormEvent } from 'react';
 import { BedDouble, CalendarDays, ChevronLeft, ChevronRight, Download, MapPin, Pencil, Plus, Route, Trash2, X } from 'lucide-react';
-import { ActivityMap, getDestination, getDirections } from './activity-map';
+import { ActivityMap, getDestination, getDirections, type TravelMode } from './activity-map';
+import DayRoute, { type RouteStop } from './day-route';
 import { createId, formatTripDates, newYork, type CalendarEvent, type Trip } from './trips';
 
 const categories = ['Viaggio', 'Sport', 'Cibo', 'Eventi', 'Altro'];
@@ -45,6 +46,7 @@ export default function Calendar({ trip, onBack, onEventsChange, onLodgingChange
   const [view, setView] = useState<'week' | 'month'>('week');
   const [editor, setEditor] = useState<CalendarEvent | null>(null);
   const [mapEvent, setMapEvent] = useState<CalendarEvent | null>(null);
+  const [mode, setMode] = useState<TravelMode>('walking');
   const [editingLodging, setEditingLodging] = useState(false);
   const firstDay = startOfWeek(view === 'week' ? selected : `${selected.slice(0, 7)}-01`);
   const days = Array.from({ length: view === 'week' ? 7 : 42 }, (_, index) => shiftDay(firstDay, index));
@@ -54,7 +56,17 @@ export default function Calendar({ trip, onBack, onEventsChange, onLodgingChange
     if (list) list.push(event);
     else eventsByDay.set(event.date, [event]);
   }
-  const agenda = (eventsByDay.get(selected) ?? []).sort((a, b) => a.time.localeCompare(b.time));
+  const agenda = (eventsByDay.get(selected) ?? [])
+    .sort((a, b) => a.time.localeCompare(b.time))
+    .map((event) => ({ event, destination: getDestination(event, isNewYork) }));
+  const stops: RouteStop[] = lodging ? [{ id: 'lodging', label: 'A', title: 'Alloggio', address: lodging }] : [];
+  let stopNumber = 0;
+  for (const { event, destination } of agenda) {
+    if (destination) {
+      stopNumber += 1;
+      stops.push({ id: event.id, label: String(stopNumber), title: event.title, address: destination, time: event.time });
+    }
+  }
 
   function navigate(direction: number) {
     setSelected((date) => view === 'week' ? shiftDay(date, direction * 7) : shiftMonth(date, direction));
@@ -160,34 +172,37 @@ export default function Calendar({ trip, onBack, onEventsChange, onLodgingChange
           </div>
           {agenda.length ? (
             <ol className="eventList itineraryAgenda">
-              {agenda.map((event) => {
-                const destination = getDestination(event, isNewYork);
-                return (
-                  <li key={event.id} className={`event ${event.category}`}>
-                    <time className="time">{event.time}</time>
-                    <div className="details">
-                      <h3>{event.title}</h3>
-                      {event.notes && <small>{event.notes}</small>}
-                      {destination && (
-                        <div className="eventActions">
-                          <button className="eventMap" onClick={() => setMapEvent(event)} aria-label={`Mostra sulla mappa: ${event.title}`}>
-                            <MapPin size={15} aria-hidden="true" /> {event.location}
-                          </button>
-                          {lodging && (
-                            <a className="directionsLink" href={getDirections(lodging, destination)} target="_blank" rel="noopener noreferrer" aria-label={`Indicazioni dall’alloggio: ${event.title}`}>
-                              <Route size={15} aria-hidden="true" /> Indicazioni
-                            </a>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <button className="edit" aria-label="Modifica evento" onClick={() => setEditor({ ...event })}><Pencil size={17} aria-hidden="true" /></button>
-                  </li>
-                );
-              })}
+              {agenda.map(({ event, destination }) => (
+                <li key={event.id} className={`event ${event.category}`}>
+                  <div className="appointmentTop">
+                    {event.time && <time className="time">{event.time}</time>}
+                    <button className="edit" aria-label="Modifica evento" onClick={() => setEditor({ ...event })}>
+                      <Pencil size={17} aria-hidden="true" />
+                    </button>
+                  </div>
+                  <div className="details">
+                    <h3>{event.title}</h3>
+                    {destination && <p className="appointmentLocation"><MapPin size={15} aria-hidden="true" /> {event.location}</p>}
+                    {event.notes && <small>{event.notes}</small>}
+                    {destination && (
+                      <div className="eventActions">
+                        <button className="eventMap" onClick={() => setMapEvent(event)} aria-label={`Mostra sulla mappa: ${event.title}`}>
+                          <MapPin size={15} aria-hidden="true" /> Mappa
+                        </button>
+                        {lodging && (
+                          <a className="directionsLink" href={getDirections(lodging, destination, mode)} target="_blank" rel="noopener noreferrer" aria-label={`Indicazioni dall’alloggio: ${event.title}`}>
+                            <Route size={15} aria-hidden="true" /> Indicazioni
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
             </ol>
           ) : <p className="empty">Nessun evento per questa giornata.</p>}
         </section>
+        <DayRoute key={JSON.stringify([selected, stops])} stops={stops} mode={mode} onModeChange={setMode} />
         <button className="backup" onClick={download}><Download size={16} aria-hidden="true" /> Esporta backup eventi</button>
       </div>
 

@@ -251,3 +251,109 @@ header { background: #fff; border-color: var(--line); }
   .itineraryAgenda .time { padding-inline: 5px; }
   .itineraryAgenda .edit { padding: 5px; }
 }
+
+.itineraryAgenda .event {
+  display: block;
+  padding: 15px 19px 18px;
+  border-radius: 17px;
+}
+.appointmentTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.appointmentTop .time { padding: 6px 10px; border-radius: 999px; }
+.appointmentTop .edit {
+  margin-inline-start: auto;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  min-height: 36px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 10px;
+}
+.itineraryAgenda h3 {
+  margin: 6px 0;
+  font: 700 clamp(1.12rem, 3.6vw, 1.4rem)/1.2 Georgia, serif;
+  overflow-wrap: anywhere;
+}
+.appointmentLocation { display: flex; align-items: center; gap: 6px; margin: 7px 0; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+.appointmentLocation svg { flex: none; }
+.eventActions { margin-top: 12px; gap: 8px; }
+.eventActions .eventMap, .eventActions .directionsLink {
+  min-height: 38px;
+  padding: 7px 11px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 10px;
+}
+.eventActions .directionsLink { border-color: transparent; }
+
+.dayRoute {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 18px;
+  background: #fff;
+}
+.routeHeading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.routeHeading h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font: 700 clamp(1.25rem, 4vw, 1.65rem)/1.15 Georgia, serif;
+}
+.routeHeading h2 svg { color: var(--accent-dark); }
+.routeMode { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: var(--muted); font-size: 13px; }
+.routeMode select {
+  padding: 7px 9px;
+  border: 1px solid var(--agenda-line);
+  border-radius: 8px;
+  background: #edf4ef;
+  color: var(--ink);
+}
+.routeMap {
+  height: clamp(230px, 40vw, 370px);
+  border: 1px solid var(--agenda-line);
+  border-radius: 12px;
+  background: #e4efea;
+  isolation: isolate;
+}
+.routePin, .routeNumber {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-dark);
+  color: #fff;
+  font: 700 13px/1 Arial, sans-serif;
+}
+.routePin { border: 2px solid #fff; box-shadow: 0 2px 5px #17253b55; }
+.routeNumber { width: 25px; height: 25px; flex: none; }
+.routeStops { display: grid; gap: 10px; margin: 15px 0; padding: 0; list-style: none; }
+.routeStops:empty { display: none; }
+.routeStops li { display: flex; gap: 9px; align-items: center; }
+.routeStops li > div { min-width: 0; overflow-wrap: anywhere; }
+.routeStops strong, .routeStopButton { font-size: 14px; }
+.routeStopButton { padding: 0; background: transparent; border: 0; color: var(--accent-dark); text-align: left; font-weight: 700; }
+.routeStopButton:hover { text-decoration: underline; }
+.routeStops small { display: block; margin-top: 2px; color: var(--muted); }
+.routeStatus { margin: 9px 0; color: var(--muted); font-size: 13px; }
+.routeStatus svg { vertical-align: middle; }
+.routeLookup { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 12px; }
+.routeLookup .itineraryAction:disabled { cursor: wait; opacity: .6; }
+.routeLinks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.routeLinks .directionsLink { min-height: 38px; }
+.routeLinks svg { flex: none; }
+
+@media (max-width: 600px) {
+  .itineraryAgenda .event { padding: 10px 12px 14px; }
+  .dayRoute { padding: 12px; }
+}
